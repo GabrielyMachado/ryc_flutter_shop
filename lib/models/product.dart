@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:shop/exceptions/http_exception.dart';
 
+import '../utils/constants.dart';
+
 class Product with ChangeNotifier {
   final String id;
   final String name;
@@ -23,7 +25,7 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  final _baseUrl = 'https://ryc-shop-default-rtdb.firebaseio.com/products';
+  final _baseUrl = Constants.PRODUCT_BASE_URL;
 
   Future<void> toggleFavorite() async {
     final isFavoriteOld = isFavorite;
