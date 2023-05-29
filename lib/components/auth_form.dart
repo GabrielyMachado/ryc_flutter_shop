@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -33,7 +36,7 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
@@ -43,11 +46,15 @@ class _AuthFormState extends State<AuthForm> {
     setState(() => _isLoading = true);
 
     _formKey.currentState?.save();
+    Auth auth = Provider.of(context, listen: false);
 
     if (_isLogin()) {
       //login
     } else {
-      // registrar
+      await auth.signup(
+        _authData['email']!,
+        _authData['password']!,
+      );
     }
 
     setState(() => _isLoading = false);
@@ -103,6 +110,7 @@ class _AuthFormState extends State<AuthForm> {
                   TextFormField(
                     decoration:
                         const InputDecoration(labelText: 'Confirmar Senha'),
+                    obscureText: true,
                     keyboardType: TextInputType.emailAddress,
                     validator: (_password) {
                       final password = _password ?? '';
